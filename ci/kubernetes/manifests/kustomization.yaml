@@ -1,0 +1,28 @@
+# Kustomization file for organizing Kubernetes resources
+# Usage: kubectl apply -k .
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: blockchain
+
+resources:
+  - 01-namespace.yaml
+  - 02-configmap.yaml
+  - 14-configmap-rate-limit.yaml
+  - 03-secrets.yaml
+  - 04-pvc-miner.yaml
+  - 15-redis.yaml
+  - 06-statefulset-miner.yaml
+  - 07-deployment-webserver.yaml
+  - 08-service-miner-headless.yaml
+  - 08-service-miner.yaml
+  - 09-service-webserver-headless.yaml
+  - 09-service-webserver.yaml
+  - 10-hpa-webserver.yaml
+  - 11-hpa-miner.yaml
+  - 12-pod-disruption-budget.yaml
+
+commonLabels:
+  managed-by: kustomize
+  part-of: blockchain-network
+

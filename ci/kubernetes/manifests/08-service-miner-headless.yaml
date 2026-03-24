@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: miner-headless
+  namespace: blockchain
+  labels:
+    app: miner
+    service-type: headless
+spec:
+  clusterIP: None  # ⚠️ Critical: Headless service - returns pod IPs directly
+  selector:
+    app: miner  # ⚠️ Critical: Must match pod labels from StatefulSet
+  ports:
+  - name: p2p
+    port: 2001
+    targetPort: 2001
+    protocol: TCP
+  # Note: No sessionAffinity for headless service (direct pod-to-pod connections)
+

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: miner-service
+  namespace: blockchain
+  labels:
+    app: miner
+spec:
+  type: ClusterIP  # Internal service, not exposed externally
+  selector:
+    app: miner
+  ports:
+  - name: p2p
+    port: 2001
+    targetPort: 2001
+    protocol: TCP
+  # Session affinity for consistent connections
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800  # 3 hours
+

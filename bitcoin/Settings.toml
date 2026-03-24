@@ -1,0 +1,7 @@
+[rate_limiter]
+redis_addr = "127.0.0.1:6379"
+ip_whitelist = ["127.0.0.1"]
+
+[[rate_limiter.limiter]]
+strategy = "ip"
+global_bucket = { tokens_count = 10, add_tokens_every = 60 }

@@ -1,0 +1,75 @@
+# Alternative compose file: Run blockchain node as a web server (no miner)
+# Usage: docker compose -f docker-compose.webserver.yml up -d
+# To scale: docker compose -f docker-compose.webserver.yml up -d --scale webserver=3
+#
+# Note: Instance numbers are auto-detected by the entrypoint script from container names
+# Instance 1: Web port 8080, P2P port 2101
+# Instance 2: Web port 8081, P2P port 2102, etc.
+
+services:
+  # Redis for axum_rate_limiter (rate limiting state)
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  webserver:
+    build:
+      context: /Users/bkunyiha/Rust/blockchain
+      dockerfile: Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+    # Remove container_name to allow scaling
+    ports:
+      - "8080:8080"  # First webserver instance - Web port
+      - "2101:2001"  # First webserver instance - P2P port (mapped to 2101)
+    volumes:
+      # Data directories are auto-configured by entrypoint (data1, data2, etc.)
+      - webserver-data:/app/data
+      - webserver-wallets:/app/wallets
+      # Rate limiter settings (used by axum_rate_limiter via RL_SETTINGS_PATH)
+      - ./Settings.toml:/app/Settings.toml:ro
+    environment:
+      # Node mode: web server (no miner)
+      # Format matches: cargo run startnode no yes <connect_nodes> [-- <address>]
+      - NODE_IS_MINER=no
+      - NODE_IS_WEB_SERVER=yes
+      # Connect nodes: "local" for seed node, or remote addresses
+      - NODE_CONNECT_NODES=${NODE_CONNECT_NODES:-local}
+      # Mining address configuration (choose one):
+      # Option 1: Use WALLET_ADDRESS_POOL (comma-separated) - each instance auto-selects by index
+      # Option 2: Use NODE_MINING_ADDRESS directly for all instances
+      # At least one must be set
+      - WALLET_ADDRESS_POOL=${WALLET_ADDRESS_POOL:-}
+      - NODE_MINING_ADDRESS=${NODE_MINING_ADDRESS:-}
+      # API authentication keys
+      - BITCOIN_API_ADMIN_KEY=${BITCOIN_API_ADMIN_KEY:-admin-secret}
+      - BITCOIN_API_WALLET_KEY=${BITCOIN_API_WALLET_KEY:-wallet-secret}
+      # Rate limiting configuration (axum_rate_limiter)
+      - RL_SETTINGS_PATH=/app/Settings.toml
+      # Optional: Central node configuration
+      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      # Wallet file path
+      - WALLET_FILE=wallets/wallets.dat
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  redis-data:
+    driver: local
+  webserver-data:
+    driver: local
+  webserver-wallets:
+    driver: local

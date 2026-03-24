@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rate-limit-settings
+  namespace: blockchain
+  labels:
+    app: blockchain
+    component: rate-limit
+data:
+  # Settings.toml for axum_rate_limiter
+  #
+  # IMPORTANT:
+  # - `redis_addr` is host:port WITHOUT the `redis://` scheme
+  # - `ip_whitelist` is optional; keep it empty by default in Kubernetes
+  Settings.toml: |
+    [rate_limiter]
+    redis_addr = "redis:6379"
+    ip_whitelist = []
+
+    [[rate_limiter.limiter]]
+    strategy = "ip"
+    global_bucket = { tokens_count = 20, add_tokens_every = 6 }
+
+

@@ -1,0 +1,254 @@
+[package]
+name = "blockchain"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# =============================================================================
+# Serialization and Data Format Libraries
+# =============================================================================
+
+# Binary serialization for blockchain data structures
+# Used in: src/domain/block.rs, src/domain/transaction.rs, src/domain/utxo_set.rs
+# Purpose: Efficient binary serialization/deserialization of blocks, transactions, and UTXO data
+# IMPORTANT: Do NOT upgrade to `bincode` v3.x.
+# `bincode` 3.0.0 on crates.io is a dependency-confusion sentinel that intentionally fails to compile:
+# see `compile_error!("https://xkcd.com/2347/")`.
+#
+# We use bincode v2's `bincode::serde::*` APIs throughout the codebase.
+bincode = { version = "2.0.1", features = ["serde"] }
+
+# Base58 encoding/decoding for Bitcoin addresses
+# Used in: src/util/utils.rs (base58_encode, base58_decode functions)
+# Purpose: Encode/decode Bitcoin addresses in Base58 format
+# Usage: Address generation and validation
+bs58 = "0.5.1"
+
+
+# Hexadecimal encoding/decoding utilities
+# Used in: Multiple files for hex encoding of hashes and transaction IDs
+# Files: src/domain/proof_of_work.rs, src/domain/transaction.rs, src/main.rs, src/server/operations.rs, src/server/process_messages.rs
+# Purpose: Convert binary data to/from hexadecimal strings for logging and display
+data-encoding = "2.10.0"
+
+# =============================================================================
+# Cryptographic Libraries
+# =============================================================================
+
+# Cryptographic primitives library (BoringSSL-based)
+# Used in: src/util/utils.rs, src/domain/wallet.rs for cryptographic operations
+# Purpose: ECDSA key generation, signing, verification, and SHA256 hashing
+# Features: ECDSA P-256, SHA256, secure random number generation
+ring = "0.17.14"
+
+# SHA256 hashing library for P2TR support
+# Used in: src/util/utils.rs for taproot_hash function
+# Purpose: SHA256 hashing for P2TR address generation
+# Usage: Replaces RIPEMD160 with secure SHA256 for modern Bitcoin addresses
+sha2 = "0.10.9"
+
+# Elliptic curve cryptography for Bitcoin operations
+# Used in: src/util/utils.rs for Schnorr signature operations
+# Purpose: Implement Schnorr signatures for P2TR (Pay-to-Taproot)
+# Features: rand - for secure random number generation
+# Note: Currently added for future Schnorr signature support
+secp256k1 = { version = "0.31.1", features = ["rand"] }
+
+# Random number generation for cryptographic operations
+# Used in: src/util/utils.rs for Schnorr signature generation
+# Purpose: Provide CryptoRng trait implementation for secp256k1
+# Features: std - for standard library support
+rand = { version = "0.10.0", features = ["std"] }
+
+# =============================================================================
+# Database and Storage
+# =============================================================================
+
+# Embedded key-value database for blockchain data
+# Used in: src/domain/blockchain.rs, src/domain/blockchain/file_system_db_chain.rs
+# Purpose: Persistent storage for blockchain data
+# Usage: Store blocks, transactions, UTXO sets, and blockchain metadata
+sled = "0.34.7"
+
+# =============================================================================
+# Asynchronous Runtime
+# =============================================================================
+
+# Asynchronous I/O and concurrent operations
+# Used in: Multiple files for async/await support
+# Files: src/domain/blockchain.rs, src/main.rs, src/server.rs, src/server/operations.rs
+# Purpose: Asynchronous I/O and concurrent operations
+# Features: full - complete async runtime with all features
+# Usage: Network operations, database I/O, concurrent blockchain operations
+tokio = { version = "1.50.0", features = ["full"] }
+
+# =============================================================================
+# Logging and Diagnostics
+# =============================================================================
+
+# Structured logging and diagnostics
+# Used in: Multiple files for advanced logging
+# Files: src/main.rs, src/server.rs, src/server/operations.rs, src/server/process_messages.rs
+# Purpose: Structured logging with levels, spans, and context
+# Usage: Debug logging, performance tracing, error tracking
+tracing = "0.1.44"
+
+# Tracing subscriber for log output configuration
+# Used in: src/main.rs for logging setup
+# Purpose: Configure tracing output format and filtering
+# Features: fmt - formatted output, env-filter - environment-based filtering
+# Disable default features to prevent conflicts, then enable the specific features you need.
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "env-filter"] }
+
+# =============================================================================
+# Command Line Interface
+# =============================================================================
+
+# Modern command-line argument parsing
+# Used in: src/main.rs for CLI argument parsing
+# Purpose: Parse command-line arguments for blockchain operations
+# Usage: Create wallet, send transactions, start nodes, etc.
+# Features: derive - automatic trait implementation, env - environment variable support
+clap = { version = "4.6.0", features = ["derive", "env"] }
+
+# =============================================================================
+# Error Handling
+# =============================================================================
+
+# Define custom error types with automatic error conversion
+# Used in: src/domain/error.rs for custom error types
+# Purpose: Define custom error types with automatic error conversion
+# Usage: Blockchain-specific error handling and propagation
+thiserror = "2.0.18"
+
+# =============================================================================
+# Serialization Framework
+# =============================================================================
+
+# Automatic serialization/deserialization of data structures
+# Used in: Multiple files for automatic serialization/deserialization
+# Files: src/domain/block.rs, src/domain/transaction.rs, src/domain/wallet.rs, src/server.rs
+# Purpose: Automatic serialization/deserialization of data structures
+# Features: derive - automatic trait implementation
+serde = { version = "1.0.228", features = ["derive"] }
+
+# JSON serialization/deserialization
+# Used in: src/server/operations.rs, src/server/process_messages.rs
+# Purpose: JSON message serialization for network communication
+# Usage: Serialize/deserialize network messages and API responses
+serde_json = "1.0.149"
+
+# =============================================================================
+# Web Framework and HTTP
+# =============================================================================
+
+# Modern web framework built on top of Tower and Hyper
+# Used in: src/web/ for HTTP API endpoints
+# Purpose: REST API and web server functionality
+# Features: ws - WebSocket support, macros - derive macros
+#
+# NOTE: `axum_rate_limiter` currently depends on Axum 0.7.x, so we align our Axum
+# version to avoid multiple-incompatible Axum versions in the dependency graph.
+# Keep Axum aligned with `axum_rate_limiter` to avoid multiple incompatible Axum versions.
+axum = { version = "0.7.9", features = ["ws", "macros"] }
+utoipa = { version = "5.4.0", features = ["axum_extras", "chrono", "uuid"] }
+# Axum integration for Swagger UI.
+# v8 targets axum 0.7.x (v9 targets newer axum).
+utoipa-swagger-ui = { version = "8.1.0", features = ["axum"] }
+
+# Tower middleware and services
+# Used in: src/web/ for middleware and service composition
+# Purpose: Middleware stack for web requests
+tower = "0.5.3"
+
+# HTTP-specific Tower middleware
+# Used in: src/web/ for CORS, tracing, and other HTTP middleware
+# Purpose: CORS handling, request tracing, compression
+tower-http = { version = "0.6.8", features = ["cors", "trace", "compression-gzip", "fs"] }
+
+# Rate limiting middleware
+# Used in: src/web/middleware/ for API rate limiting
+# Purpose: Prevent API abuse and ensure fair usage
+tower_governor = "0.8.0"
+
+# Redis-backed Axum rate limiting middleware (token bucket)
+# Used in: src/web/middleware/rate_limit.rs
+# Purpose: Distributed rate limiting with configurable strategies (IP/URL/header/query/body)
+axum_rate_limiter = "0.1.1"
+
+# HTTP client and server library
+# Used in: src/web/ for low-level HTTP operations
+# Purpose: HTTP protocol implementation
+hyper = { version = "1.8", features = ["full"] }
+
+# WebSocket support
+# Used in: src/web/ for real-time blockchain updates
+# Purpose: WebSocket connections for live data streaming
+tokio-tungstenite = "0.29.0"
+
+# Request validation
+# Used in: src/web/ for validating API requests
+# Purpose: Input validation and sanitization
+validator = { version = "0.20.0", features = ["derive"] }
+
+# Date and time handling
+# Used in: src/web/ for timestamp formatting
+# Purpose: Human-readable timestamps in API responses
+chrono = { version = "0.4", features = ["serde"] }
+
+# =============================================================================
+# Utilities
+# =============================================================================
+
+# Global state management with lazy initialization
+# Used in: src/config.rs, src/server.rs for global configuration
+# Purpose: Thread-safe global variables with lazy initialization
+# Usage: Global configuration storage and server state management
+once_cell = "1.21.4"
+
+# Arbitrary-precision integer arithmetic
+# Used in: src/domain/proof_of_work.rs for difficulty calculations
+# Purpose: Handle large numbers for proof-of-work difficulty calculations
+# Usage: Target difficulty computation in mining algorithm
+num-bigint = "0.4.6"
+
+# Generate unique identifiers
+# Used in: Multiple files for unique identifier generation
+# Files: src/domain/transaction.rs, src/domain/blockchain.rs, tests/
+# Purpose: Generate unique identifiers for transactions and test databases
+# Features: v4 - random UUID generation
+# Usage: Transaction IDs, test database naming, unique resource identification
+uuid = { version = "1.22.0", features = ["v4"]}
+
+# =============================================================================
+# Removed Dependencies (for reference)
+# =============================================================================
+# Note: The following packages have been removed as they are no longer used:
+# - rust-crypto (0.2.36) - Deprecated, replaced by sha2 for P2TR support
+# - rustc-serialize (0.3.25) - Unused, replaced by serde/bincode for serialization
+# - env_logger (0.11.8) - Unused, logging handled by tracing-subscriber
+# - clap (4.5.46) - Unused, structopt is currently being used for CLI parsing
+# - log (0.4.27) - Direct usage migrated to tracing (still present as transitive dependency via sled)
+
+[dev-dependencies]
+# =============================================================================
+# Testing and Development Dependencies
+# =============================================================================
+
+# Command-line testing utilities
+# Used in: tests/ for integration testing
+# Purpose: Test command-line applications and their output
+# Usage: Verify CLI commands work correctly
+assert_cmd = "2.2.0"
+
+# Temporary file and directory utilities
+# Used in: tests/ for temporary test data
+# Purpose: Create temporary files and directories for testing
+# Usage: Test database creation, temporary blockchain data
+tempfile = "3.27"
+
+# Hexadecimal encoding/decoding for tests
+# Used in: src/crypto/ tests for hex encoding/decoding
+# Purpose: Convert binary data to/from hexadecimal strings in tests
+# Usage: Test hash functions with known hex values
+hex = "0.4.3"

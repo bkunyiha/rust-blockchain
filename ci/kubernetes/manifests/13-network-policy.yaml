@@ -1,0 +1,54 @@
+# Network Policy for securing blockchain network
+# Uncomment and customize based on your security requirements
+
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: blockchain-netpol
+#   namespace: blockchain
+# spec:
+#   podSelector:
+#     matchLabels:
+#       component: blockchain-node
+#   policyTypes:
+#   - Ingress
+#   - Egress
+#   ingress:
+#   # Allow traffic from within the namespace
+#   - from:
+#     - namespaceSelector:
+#         matchLabels:
+#           name: blockchain
+#     ports:
+#     - protocol: TCP
+#       port: 2001  # P2P port
+#     - protocol: TCP
+#       port: 8080  # Web port
+#   # Allow traffic from ingress controller (if using)
+#   - from:
+#     - namespaceSelector:
+#         matchLabels:
+#           name: ingress-nginx
+#     ports:
+#     - protocol: TCP
+#       port: 8080
+#   egress:
+#   # Allow DNS resolution
+#   - to:
+#     - namespaceSelector:
+#         matchLabels:
+#           name: kube-system
+#     ports:
+#     - protocol: UDP
+#       port: 53
+#   # Allow traffic to miner service
+#   - to:
+#     - podSelector:
+#         matchLabels:
+#           app: miner
+#     ports:
+#     - protocol: TCP
+#       port: 2001
+#   # Allow external internet access (for P2P networking)
+#   - {}  # Allow all egress (required for blockchain P2P)
+

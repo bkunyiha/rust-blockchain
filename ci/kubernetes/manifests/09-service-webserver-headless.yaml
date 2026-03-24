@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver-headless
+  namespace: blockchain
+  labels:
+    app: webserver
+    service-type: headless
+spec:
+  clusterIP: None
+  selector:
+    app: webserver
+  ports:
+    - name: web
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+    - name: p2p
+      port: 2001
+      targetPort: 2001
+      protocol: TCP
+
+

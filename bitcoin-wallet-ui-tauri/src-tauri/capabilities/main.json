@@ -1,0 +1,13 @@
+{
+  "identifier": "main-capability",
+  "description": "Main window capability",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "clipboard-manager:default",
+    "clipboard-manager:allow-write-text",
+    "clipboard-manager:allow-read-text",
+    "shell:default",
+    "shell:allow-open"
+  ]
+}

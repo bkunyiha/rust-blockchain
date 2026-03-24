@@ -1,0 +1,34 @@
+{
+  "productName": "Bitcoin Desktop UI",
+  "version": "0.1.0",
+  "identifier": "com.bitcoin.desktop-ui",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "title": "Bitcoin Desktop UI",
+    "windows": [
+      {
+        "title": "Bitcoin Desktop UI",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    }
+  },
+  "plugins": {
+    "clipboard-manager": {
+      "all": true
+    },
+    "shell": {
+      "open": true
+    }
+  }
+}

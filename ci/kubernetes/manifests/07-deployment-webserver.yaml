@@ -1,0 +1,184 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webserver
+  namespace: blockchain
+  labels:
+    app: webserver
+    component: blockchain-node
+spec:
+  serviceName: webserver-headless
+  replicas: 2  # Start with 2 webservers
+  selector:
+    matchLabels:
+      app: webserver
+
+  # Each webserver gets its own PVCs (isolated blockchain + wallet storage)
+  volumeClaimTemplates:
+  - metadata:
+      name: webserver-data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 50Gi
+  - metadata:
+      name: webserver-wallets
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+
+  template:
+    metadata:
+      labels:
+        app: webserver
+        component: blockchain-node
+    spec:
+      # Init containers: Wait for miner service to be available
+      initContainers:
+      - name: wait-for-miner
+        image: busybox:1.35
+        command: ['sh', '-c', 'until nc -z miner-service.blockchain.svc.cluster.local 2001; do echo waiting for miner; sleep 2; done;']
+      - name: wait-for-redis
+        image: busybox:1.35
+        command: ['sh', '-c', 'until nc -z redis.blockchain.svc.cluster.local 6379; do echo waiting for redis; sleep 2; done;']
+      
+      containers:
+      - name: blockchain-node
+        image: blockchain-node:latest
+        # For production, use a specific version tag and registry:
+        # image: your-registry/blockchain-node:v1.0.0
+        imagePullPolicy: IfNotPresent
+        
+        # Ports
+        ports:
+        - name: web
+          containerPort: 8080
+          protocol: TCP
+        - name: p2p
+          containerPort: 2001
+          protocol: TCP
+        
+        # Environment variables from ConfigMap
+        env:
+        - name: NODE_IS_MINER
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: WEBSERVER_NODE_IS_MINER
+        - name: NODE_IS_WEB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: WEBSERVER_NODE_IS_WEB_SERVER
+        - name: NODE_CONNECT_NODES
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: WEBSERVER_NODE_CONNECT_NODES
+        - name: SEQUENTIAL_STARTUP
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: SEQUENTIAL_STARTUP
+        - name: CENTERAL_NODE
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: CENTERAL_NODE
+        - name: WALLET_FILE
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: WALLET_FILE
+
+        # Rate limiting configuration (axum_rate_limiter)
+        - name: RL_SETTINGS_PATH
+          value: /app/Settings.toml
+        
+        # Environment variables from Secrets
+        - name: BITCOIN_API_ADMIN_KEY
+          valueFrom:
+            secretKeyRef:
+              name: blockchain-secrets
+              key: BITCOIN_API_ADMIN_KEY
+        - name: BITCOIN_API_WALLET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: blockchain-secrets
+              key: BITCOIN_API_WALLET_KEY
+        
+        # Environment variables from Secrets
+        - name: NODE_MINING_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: blockchain-secrets
+              key: MINER_ADDRESS
+              optional: true
+        
+        # Use Downward API to get pod information
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        
+        # Volume mounts
+        volumeMounts:
+        - name: webserver-data
+          mountPath: /app/data
+        - name: webserver-wallets
+          mountPath: /app/wallets
+        - name: rate-limit-settings
+          mountPath: /app/Settings.toml
+          subPath: Settings.toml
+          readOnly: true
+        
+        # Resource limits
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+        
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /api/health/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /api/health/ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      
+      # Volumes
+      volumes:
+      - name: rate-limit-settings
+        configMap:
+          name: rate-limit-settings
+          items:
+            - key: Settings.toml
+              path: Settings.toml
+

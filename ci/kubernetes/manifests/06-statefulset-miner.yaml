@@ -1,0 +1,147 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: miner
+  namespace: blockchain
+  labels:
+    app: miner
+    component: blockchain-node
+spec:
+  serviceName: miner-headless  # ⚠️ Critical: Links to headless service for stable DNS
+  replicas: 2  # Start with 2 miners
+  selector:
+    matchLabels:
+      app: miner
+
+  # ⚠️ Critical: StatefulSet uses volumeClaimTemplates (at spec level, not pod template)
+  # Each pod gets its own PVC automatically: miner-data-miner-0, miner-data-miner-1, etc.
+  # This ensures each miner has isolated persistent storage
+  volumeClaimTemplates:
+  - metadata:
+      name: miner-data
+    spec:
+      accessModes:
+        - ReadWriteOnce  # Single pod access
+      resources:
+        requests:
+          storage: 50Gi  # Adjust based on blockchain size
+  - metadata:
+      name: miner-wallets
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi  # Wallets are typically small
+
+  template:
+    metadata:
+      labels:
+        app: miner
+        component: blockchain-node
+    spec:
+      containers:
+      - name: blockchain-node
+        image: blockchain-node:latest
+        # For production, use a specific version tag and registry:
+        # image: your-registry/blockchain-node:v1.0.0
+        imagePullPolicy: IfNotPresent  # Use Always in production
+        
+        # Ports
+        ports:
+        - name: p2p
+          containerPort: 2001
+          protocol: TCP
+        
+        # Environment variables from ConfigMap
+        env:
+        - name: NODE_IS_MINER
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: MINER_NODE_IS_MINER
+        - name: NODE_IS_WEB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: MINER_NODE_IS_WEB_SERVER
+        # ⚠️ Important: NODE_CONNECT_NODES will be set by entrypoint script based on pod ordinal
+        - name: NODE_CONNECT_NODES
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: MINER_NODE_CONNECT_NODES
+        - name: SEQUENTIAL_STARTUP
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: SEQUENTIAL_STARTUP
+        - name: CENTERAL_NODE
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: CENTERAL_NODE
+        - name: WALLET_FILE
+          valueFrom:
+            configMapKeyRef:
+              name: blockchain-config
+              key: WALLET_FILE
+        
+        # Environment variables from Secrets
+        - name: NODE_MINING_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: blockchain-secrets
+              key: MINER_ADDRESS
+              optional: true
+        
+        # ⚠️ Critical: Use Downward API to get pod information for StatefulSet
+        # StatefulSet pods have stable names: miner-0, miner-1, miner-2, etc.
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        
+        # Volume mounts
+        # ⚠️ Important: StatefulSet uses volumeClaimTemplates instead of volumes
+        # Each pod gets its own PVC automatically
+        volumeMounts:
+        - name: miner-data
+          mountPath: /app/data
+        - name: miner-wallets
+          mountPath: /app/wallets
+        
+        # Resource limits and requests
+        resources:
+          requests:
+            cpu: "500m"      # 0.5 CPU
+            memory: "512Mi"  # 512 MB RAM
+          limits:
+            cpu: "2000m"     # 2 CPU (mining is CPU-intensive)
+            memory: "2Gi"    # 2 GB RAM
+        
+        # Health checks
+        livenessProbe:
+          tcpSocket:
+            port: 2001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          tcpSocket:
+            port: 2001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+

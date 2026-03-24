@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "identifier": "main-window",
+  "description": "Capability for main window with all custom commands",
+  "windows": ["main"],
+  "webApi": {
+    "all": false,
+    "clipboardReadText": true,
+    "clipboardWriteText": true
+  },
+  "permissions": [
+    "core:window:allow-create",
+    "core:window:allow-close",
+    "core:window:allow-label",
+    "core:window:allow-fullscreen",
+    "core:window:allow-focus",
+    "core:window:allow-request-user-attention",
+    "core:window:allow-set-always-on-top",
+    "core:window:allow-set-icon",
+    "core:window:allow-set-min-size",
+    "core:window:allow-set-max-size",
+    "core:window:allow-set-position",
+    "core:window:allow-set-size",
+    "core:window:allow-set-title",
+    "core:window:allow-show",
+    "core:window:allow-hide",
+    "core:window:allow-minimize",
+    "core:window:allow-maximize",
+    "core:window:allow-unmaximize",
+    "core:window:allow-unminimize",
+    "shell:allow-open"
+  ],
+  "commands": {
+    "allowlist": [
+      "get_blockchain_info",
+      "get_latest_blocks",
+      "get_all_blocks",
+      "get_block_by_hash",
+      "create_wallet",
+      "get_wallet_info",
+      "get_balance",
+      "send_transaction",
+      "get_tx_history",
+      "get_all_addresses",
+      "get_mempool",
+      "get_mempool_transaction",
+      "get_all_transactions",
+      "get_address_transactions",
+      "get_mining_info",
+      "generate_blocks",
+      "health_check",
+      "liveness_check",
+      "readiness_check",
+      "get_config",
+      "update_config",
+      "check_connection"
+    ]
+  }
+}

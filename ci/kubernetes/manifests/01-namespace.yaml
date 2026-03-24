@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: blockchain
+  labels:
+    name: blockchain
+    environment: production
+    managed-by: kubernetes
+

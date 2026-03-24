@@ -1,0 +1,136 @@
+# Multi-instance blockchain network
+# Default: 1 miner + 1 webserver
+# Scale with: docker compose up -d --scale miner=3 --scale webserver=2
+# Or set NUM_MINERS and NUM_WEBSERVERS environment variables
+
+services:
+  # Redis for axum_rate_limiter (rate limiting state)
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Miner service - can be scaled to run multiple miners
+  miner:
+    build:
+      context: /Users/bkunyiha/Rust/blockchain
+      dockerfile: Dockerfile
+    # Note: When scaling, only the first instance gets port mapping
+    # Other instances use internal ports only (accessible via docker network)
+    # To expose all instances, use port ranges or create separate services
+    ports:
+      - "2001:2001"  # First miner instance
+    volumes:
+      # Volume mounted at /app/data - each instance stores data in subdirectories
+      # Instance 1: /app/data/data1, Instance 2: /app/data/data2, etc.
+      # This ensures each node has its own isolated blockchain copy
+      - miner-data:/app/data
+      - miner-wallets:/app/wallets
+    environment:
+      # Node configuration
+      # Note: NODE_IS_MINER=yes overrides the Dockerfile default (which is "no")
+      # The default "no" is a safe fallback for standalone container runs
+      - NODE_IS_MINER=yes
+      - NODE_IS_WEB_SERVER=no
+      # Connect nodes: "local" for seed node, or remote addresses
+      # When SEQUENTIAL_STARTUP=yes, this will be auto-configured to previous node
+      - NODE_CONNECT_NODES=${MINER_CONNECT_NODES:-local}
+      # Mining address configuration (choose one):
+      # Option 1: Use WALLET_ADDRESS_POOL (comma-separated) - each instance auto-selects by index
+      # Option 2: Use NODE_MINING_ADDRESS directly for all instances
+      # At least one must be set
+      - WALLET_ADDRESS_POOL=${WALLET_ADDRESS_POOL:-}
+      - NODE_MINING_ADDRESS=${NODE_MINING_ADDRESS:-}
+      # Sequential startup: each node waits for previous node (default: yes)
+      - SEQUENTIAL_STARTUP=${SEQUENTIAL_STARTUP:-yes}
+      # Optional: Central node configuration
+      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      # Wallet file path
+      - WALLET_FILE=wallets/wallets.dat
+    restart: unless-stopped
+    healthcheck:
+      # Health check for miners: check if P2P port is listening
+      # Note: This is a simple TCP check, actual readiness is verified by wait script
+      test: ["CMD-SHELL", "timeout 1 bash -c 'echo > /dev/tcp/localhost/2001' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    # Instance number is auto-detected from container name by entrypoint script
+
+  # Webserver service - can be scaled to run multiple webservers
+  webserver:
+    build:
+      context: /Users/bkunyiha/Rust/blockchain
+      dockerfile: Dockerfile
+    # Webservers depend on at least one miner being available
+    depends_on:
+      miner:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Note: When scaling, only the first instance gets port mapping
+    # Other instances use internal ports only (accessible via docker network)
+    # To expose all instances, use port ranges or create separate services
+    ports:
+      - "8080:8080"  # First webserver instance - Web port
+      - "2101:2001"  # First webserver instance - P2P port (mapped to 2101 to avoid conflict)
+    volumes:
+      # Volume mounted at /app/data - each instance stores data in subdirectories
+      # Instance 1: /app/data/data1, Instance 2: /app/data/data2, etc.
+      # This ensures each node has its own isolated blockchain copy
+      - webserver-data:/app/data
+      - webserver-wallets:/app/wallets
+      # Rate limiter settings (used by axum_rate_limiter via RL_SETTINGS_PATH)
+      - ./Settings.toml:/app/Settings.toml:ro
+    environment:
+      # Node configuration
+      - NODE_IS_MINER=no
+      - NODE_IS_WEB_SERVER=yes
+      # Connect nodes: webservers connect to first miner by default
+      # When SEQUENTIAL_STARTUP=yes, this will be auto-configured to previous node
+      # Default connects to first miner (miner_1:2001)
+      - NODE_CONNECT_NODES=${WEBSERVER_CONNECT_NODES:-miner_1:2001}
+      # Sequential startup: each node waits for previous node (default: yes)
+      - SEQUENTIAL_STARTUP=${SEQUENTIAL_STARTUP:-yes}
+      # Mining address configuration (choose one):
+      # Option 1: Use WALLET_ADDRESS_POOL (comma-separated) - each instance auto-selects by index
+      # Option 2: Use NODE_MINING_ADDRESS directly for all instances
+      # At least one must be set
+      - WALLET_ADDRESS_POOL=${WALLET_ADDRESS_POOL:-}
+      - NODE_MINING_ADDRESS=${NODE_MINING_ADDRESS:-}
+      # API authentication keys
+      - BITCOIN_API_ADMIN_KEY=${BITCOIN_API_ADMIN_KEY:-admin-secret}
+      - BITCOIN_API_WALLET_KEY=${BITCOIN_API_WALLET_KEY:-wallet-secret}
+      # Rate limiting configuration (axum_rate_limiter)
+      - RL_SETTINGS_PATH=/app/Settings.toml
+      # Optional: Central node configuration
+      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      # Wallet file path
+      - WALLET_FILE=wallets/wallets.dat
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    # Instance number is auto-detected from container name by entrypoint script
+
+volumes:
+  redis-data:
+    driver: local
+  miner-data:
+    driver: local
+  miner-wallets:
+    driver: local
+  webserver-data:
+    driver: local
+  webserver-wallets:
+    driver: local

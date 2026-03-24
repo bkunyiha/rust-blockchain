@@ -1,0 +1,33 @@
+[package]
+name = "bitcoin-api"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+# Feature flags control which client surfaces are compiled.
+# - client: enables HTTP client support (reqwest + tokio)
+# - wallet: enables WalletClient APIs (create wallet, send transaction)
+# - admin: enables AdminClient APIs (blockchain, mining, etc.)
+# - ws: reserved for future websocket client support
+default = ["client", "wallet", "admin"]
+client = ["dep:reqwest", "dep:tokio", "dep:tracing"]
+wallet = []
+admin = []
+ws = []
+
+[dependencies]
+# Serialization and error handling
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0.18"
+url = "2.5"
+
+# HTTP client/runtime (enabled by the `client` feature)
+reqwest = { version = "0.13", features = ["json"], optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"], optional = true }
+tracing = { version = "0.1", optional = true }
+
+[dev-dependencies]
+# Used for async tests/examples in this crate
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+

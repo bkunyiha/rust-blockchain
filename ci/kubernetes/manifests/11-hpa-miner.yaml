@@ -1,0 +1,31 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: miner-hpa
+  namespace: blockchain
+  labels:
+    app: miner
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet  # ⚠️ Important: Changed from Deployment to StatefulSet
+    name: miner
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80  # Miners can use more CPU
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 600  # Wait 10 min before scaling down miners
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Pods
+        value: 1  # Add 1 miner at a time (more conservative)
+        periodSeconds: 120
+

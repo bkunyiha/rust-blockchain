@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blockchain-config
+  namespace: blockchain
+  labels:
+    app: blockchain
+    component: config
+data:
+  # Default node configuration
+  # These are common settings used by all node types
+  NODE_IS_WEB_SERVER: "no"
+  SEQUENTIAL_STARTUP: "no"  # Kubernetes handles orchestration, so we don't need sequential startup
+  CENTERAL_NODE: ""         # Optional central node address
+  WALLET_FILE: "wallets/wallets.dat"  # Path to wallet file
+  
+  # Miner-specific defaults
+  # These are used when creating miner pods
+  MINER_NODE_IS_MINER: "yes"           # Enable mining
+  MINER_NODE_IS_WEB_SERVER: "no"       # Disable web server
+  MINER_NODE_CONNECT_NODES: "local"    # Start as seed node (first miner)
+  
+  # Webserver-specific defaults
+  # These are used when creating webserver pods
+  WEBSERVER_NODE_IS_MINER: "no"       # Disable mining
+  WEBSERVER_NODE_IS_WEB_SERVER: "yes"  # Enable web server
+  # Connect to miner service using Kubernetes DNS
+  # Format: <service-name>.<namespace>.svc.cluster.local:<port>
+  WEBSERVER_NODE_CONNECT_NODES: "miner-service.blockchain.svc.cluster.local:2001"
+

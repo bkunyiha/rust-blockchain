@@ -1,0 +1,26 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: miner-pdb
+  namespace: blockchain
+  labels:
+    app: miner
+spec:
+  minAvailable: 1  # Always keep at least 1 miner running
+  selector:
+    matchLabels:
+      app: miner
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: webserver-pdb
+  namespace: blockchain
+  labels:
+    app: webserver
+spec:
+  minAvailable: 1  # Always keep at least 1 webserver running
+  selector:
+    matchLabels:
+      app: webserver
+

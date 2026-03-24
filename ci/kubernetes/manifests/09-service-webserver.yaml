@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver-service
+  namespace: blockchain
+  labels:
+    app: webserver
+spec:
+  # For cloud providers, use LoadBalancer
+  # For local development (Minikube), use NodePort or enable tunnel
+  type: LoadBalancer
+  # Alternative for local: type: NodePort
+  selector:
+    app: webserver
+  ports:
+  - name: web
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+    # For NodePort, uncomment and specify:
+    # nodePort: 30080
+  - name: p2p
+    port: 2101
+    targetPort: 2001  # Internal port is 2001
+    protocol: TCP
+    # For NodePort, uncomment and specify:
+    # nodePort: 32101
+

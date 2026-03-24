@@ -1,0 +1,43 @@
+# Alternative compose file: Run blockchain node as a miner (no web server)
+# Usage: docker compose -f docker-compose.miner.yml up -d
+# To scale: docker compose -f docker-compose.miner.yml up -d --scale miner=3
+#
+# Note: Instance numbers are auto-detected by the entrypoint script from container names
+# Instance 1: P2P port 2001, Instance 2: P2P port 2002, etc.
+
+services:
+  miner:
+    build:
+      context: /Users/bkunyiha/Rust/blockchain
+      dockerfile: Dockerfile
+    # Remove container_name to allow scaling
+    ports:
+      - "2001:2001"  # First miner instance P2P port
+    volumes:
+      # Data directories are auto-configured by entrypoint (data1, data2, etc.)
+      - miner-data:/app/data
+      - miner-wallets:/app/wallets
+    environment:
+      # Node mode: miner (no web server)
+      # Format matches: cargo run startnode yes no local -- <address>
+      - NODE_IS_MINER=yes
+      - NODE_IS_WEB_SERVER=no
+      # Connect nodes: "local" for seed node, or remote addresses
+      - NODE_CONNECT_NODES=${NODE_CONNECT_NODES:-local}
+      # Mining address configuration (choose one):
+      # Option 1: Use WALLET_ADDRESS_POOL (comma-separated) - each instance auto-selects by index
+      # Option 2: Use NODE_MINING_ADDRESS directly for all instances
+      # At least one must be set
+      - WALLET_ADDRESS_POOL=${WALLET_ADDRESS_POOL:-}
+      - NODE_MINING_ADDRESS=${NODE_MINING_ADDRESS:-}
+      # Optional: Central node configuration
+      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      # Wallet file path
+      - WALLET_FILE=wallets/wallets.dat
+    restart: unless-stopped
+
+volumes:
+  miner-data:
+    driver: local
+  miner-wallets:
+    driver: local

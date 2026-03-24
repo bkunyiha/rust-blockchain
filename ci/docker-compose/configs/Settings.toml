@@ -1,0 +1,16 @@
+[rate_limiter]
+# Docker Compose service DNS name + default Redis port.
+# NOTE: axum_rate_limiter expects host:port (no redis:// scheme).
+redis_addr = "redis:6379"
+
+# Bypass rate limiting for trusted IPs.
+# In containers, requests from outside Docker often appear as a bridge/gateway IP,
+# so keep this list small unless you know your network topology.
+ip_whitelist = ["127.0.0.1"]
+
+# Default per-IP limit (token bucket)
+[[rate_limiter.limiter]]
+strategy = "ip"
+global_bucket = { tokens_count = 20, add_tokens_every = 6 }
+
+

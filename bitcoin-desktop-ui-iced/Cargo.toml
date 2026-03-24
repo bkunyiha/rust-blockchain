@@ -1,0 +1,23 @@
+[package]
+name = "bitcoin-desktop-ui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# UI framework
+iced = { version = "0.14.0", features = ["advanced"] }
+
+# Shared typed HTTP client for the node API.
+# Admin UI needs full surface: client + wallet + admin features.
+# We disable default-features to opt-in explicitly to what we need.
+bitcoin-api = { path = "../bitcoin-api", features = ["client", "wallet", "admin"], default-features = false }
+
+# Async runtime used by the API client in this UI process.
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+serde_json = "1.0"
+
+# Tracing for logging
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Clipboard support
+arboard = "3.6"
