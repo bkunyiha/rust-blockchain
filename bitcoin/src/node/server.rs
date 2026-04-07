@@ -13,19 +13,19 @@ use tracing::{error, info, instrument};
 
 pub const NODE_VERSION: usize = 1;
 
-pub static CENTERAL_NODE: Lazy<SocketAddr> = Lazy::new(|| {
+pub static CENTRAL_NODE: Lazy<SocketAddr> = Lazy::new(|| {
     let central_node_str =
-        env::var("CENTERAL_NODE").unwrap_or_else(|_| "127.0.0.1:2001".to_string());
+        env::var("CENTRAL_NODE").unwrap_or_else(|_| "127.0.0.1:2001".to_string());
 
-    // Handle empty string case (when CENTERAL_NODE is set but empty)
+    // Handle empty string case (when CENTRAL_NODE is set but empty)
     if central_node_str.is_empty() {
         "127.0.0.1:2001"
             .parse()
-            .expect("Failed to parse default CENTERAL_NODE address")
+            .expect("Failed to parse default CENTRAL_NODE address")
     } else {
         central_node_str
             .parse()
-            .expect("CENTERAL_NODE environment variable is not a valid socket address")
+            .expect("CENTRAL_NODE environment variable is not a valid socket address")
     }
 });
 
@@ -34,7 +34,7 @@ pub const TRANSACTION_THRESHOLD: usize = 3;
 pub static GLOBAL_NODES: Lazy<Nodes> = Lazy::new(|| {
     let nodes = Nodes::new();
 
-    nodes.add_node(*CENTERAL_NODE).expect("Node add error");
+    nodes.add_node(*CENTRAL_NODE).expect("Node add error");
     nodes
 });
 
@@ -72,7 +72,7 @@ impl ConnectNode {
     pub fn get_addr(&self) -> SocketAddr {
         match self {
             ConnectNode::Remote(addr) => *addr,
-            ConnectNode::Local => *CENTERAL_NODE,
+            ConnectNode::Local => *CENTRAL_NODE,
         }
     }
 }
@@ -118,13 +118,13 @@ impl Server {
         );
 
         // If the node is not the central node, send the version message to the central node.
-        if !addrs.eq(&CENTERAL_NODE) {
+        if !addrs.eq(&CENTRAL_NODE) {
             let best_height = self
                 .node_context
                 .get_blockchain_height()
                 .await
                 .expect("Blockchain read error");
-            send_version(&CENTERAL_NODE, best_height).await;
+            send_version(&CENTRAL_NODE, best_height).await;
         } else {
             info!("Register with node {:?}", connect_nodes);
             // Add the connect node to the global nodes set.

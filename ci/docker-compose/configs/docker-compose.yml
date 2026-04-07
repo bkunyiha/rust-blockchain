@@ -50,7 +50,7 @@ services:
       # Sequential startup: each node waits for previous node (default: yes)
       - SEQUENTIAL_STARTUP=${SEQUENTIAL_STARTUP:-yes}
       # Optional: Central node configuration
-      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      - CENTRAL_NODE=${CENTRAL_NODE:-}
       # Wallet file path
       - WALLET_FILE=wallets/wallets.dat
     restart: unless-stopped
@@ -111,7 +111,7 @@ services:
       # Rate limiting configuration (axum_rate_limiter)
       - RL_SETTINGS_PATH=/app/Settings.toml
       # Optional: Central node configuration
-      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      - CENTRAL_NODE=${CENTRAL_NODE:-}
       # Wallet file path
       - WALLET_FILE=wallets/wallets.dat
     restart: unless-stopped

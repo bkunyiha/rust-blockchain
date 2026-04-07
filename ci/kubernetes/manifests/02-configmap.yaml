@@ -11,7 +11,7 @@ data:
   # These are common settings used by all node types
   NODE_IS_WEB_SERVER: "no"
   SEQUENTIAL_STARTUP: "no"  # Kubernetes handles orchestration, so we don't need sequential startup
-  CENTERAL_NODE: ""         # Optional central node address
+  CENTRAL_NODE: ""         # Optional central node address
   WALLET_FILE: "wallets/wallets.dat"  # Path to wallet file
   
   # Miner-specific defaults

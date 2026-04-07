@@ -31,7 +31,7 @@ services:
       - WALLET_ADDRESS_POOL=${WALLET_ADDRESS_POOL:-}
       - NODE_MINING_ADDRESS=${NODE_MINING_ADDRESS:-}
       # Optional: Central node configuration
-      - CENTERAL_NODE=${CENTERAL_NODE:-}
+      - CENTRAL_NODE=${CENTRAL_NODE:-}
       # Wallet file path
       - WALLET_FILE=wallets/wallets.dat
     restart: unless-stopped

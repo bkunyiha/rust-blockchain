@@ -52,11 +52,11 @@ spec:
             configMapKeyRef:
               name: blockchain-config
               key: SEQUENTIAL_STARTUP
-        - name: CENTERAL_NODE
+        - name: CENTRAL_NODE
           valueFrom:
             configMapKeyRef:
               name: blockchain-config
-              key: CENTERAL_NODE
+              key: CENTRAL_NODE
         - name: WALLET_FILE
           valueFrom:
             configMapKeyRef:

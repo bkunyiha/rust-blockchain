@@ -65,7 +65,7 @@ use crate::node::miner::{
 use crate::node::txmempool::{
     add_to_memory_pool, remove_from_memory_pool, transaction_exists_in_pool,
 };
-use crate::node::{CENTERAL_NODE, GLOBAL_NODES, Node, OpType};
+use crate::node::{CENTRAL_NODE, GLOBAL_NODES, Node, OpType};
 use crate::transaction::TxSummary;
 use crate::{Block, Transaction, WalletAddress, WalletTransaction};
 use std::collections::HashMap;
@@ -1018,7 +1018,7 @@ impl NodeContext {
         let my_node_addr = GLOBAL_CONFIG.get_node_addr();
 
         // Broadcast to network if this is the central node
-        if my_node_addr.eq(&CENTERAL_NODE) {
+        if my_node_addr.eq(&CENTRAL_NODE) {
             let nodes = self.get_nodes_excluding_sender(addr_from).await?;
             self.broadcast_transaction_to_nodes(&nodes, utxo.get_id_bytes())
                 .await;

@@ -4465,7 +4465,7 @@ mod tests {
     async fn test_mine_additional_blocks_for_node1() {
         // Set up environment variables for Node 1
         unsafe {
-            std::env::set_var("CENTERAL_NODE", "127.0.0.1:2001");
+            std::env::set_var("CENTRAL_NODE", "127.0.0.1:2001");
             std::env::set_var("BLOCKS_TREE", "blocks1");
             std::env::set_var("TREE_DIR", "data1");
             std::env::set_var("NODE_ADDR", "127.0.0.1:2001");
