@@ -50,21 +50,7 @@ cd ci/docker-compose/configs
 
 ## Documentation
 
-**Complete Book Documentation**: See [`../../book-draft/ci/docker-compose/`](../../book-draft/ci/docker-compose/) for comprehensive chapter-by-chapter guide.
-
-**All Chapters:**
-- **[Chapter 1: Introduction & Quick Start](../../book-draft/ci/docker-compose/01-Introduction.md)** - Complete Docker Compose guide with quick start, examples, and troubleshooting
-- **[Chapter 2: Architecture & Container System](../../book-draft/ci/docker-compose/02-Architecture.md)** - Container naming, instance detection, volumes, and data directories
-- **[Chapter 3: Execution Flow & Startup Process](../../book-draft/ci/docker-compose/03-Execution-Flow.md)** - Complete code execution order from Docker Compose to blockchain binary
-- **[Chapter 4: Network Configuration](../../book-draft/ci/docker-compose/04-Network-Configuration.md)** - Node connections, miner connection chain, and network topology
-- **[Chapter 5: Port Mapping & External Access](../../book-draft/ci/docker-compose/05-Port-Mapping.md)** - Port mapping details, scaling helper script, and external access strategies
-- **[Chapter 6: Scaling & Deployment](../../book-draft/ci/docker-compose/06-Scaling.md)** - Scaling methods comparison, incremental scaling, and data persistence
-- **[Chapter 7: Sequential Startup](../../book-draft/ci/docker-compose/07-Sequential-Startup.md)** - Sequential startup mechanism, health checks, and wait script behavior
-- **[Chapter 8: Deployment Scenarios](../../book-draft/ci/docker-compose/08-Deployment-Scenarios.md)** - Common deployment scenarios, examples, and best practices
-- **[Chapter 9: Accessing Webserver](../../book-draft/ci/docker-compose/09-Accessing-Webserver.md)** - How to reach the REST API and Swagger UI
-- **[Chapter 10: Deployment Guide](../../book-draft/ci/docker-compose/10-Deployment-Guide.md)** - Repeatable workflows and operational tips
-- **[Chapter 11: Deployment Execution Walkthrough](../../book-draft/ci/docker-compose/11-Deployment-Execution-Walkthrough.md)** - What happens step-by-step when you run compose
-- **[Chapter 12: DNS Resolution Mechanism](../../book-draft/ci/docker-compose/12-DNS-Resolution-Mechanism.md)** - How container names/services become resolvable hostnames
+For a comprehensive chapter-by-chapter walkthrough — covering architecture, execution flow, network configuration, port mapping, scaling, sequential startup, deployment scenarios, and DNS resolution — see the Docker Compose Deployment chapter in the published book *Building a Blockchain in Rust*.
 
 ## Key Features
 

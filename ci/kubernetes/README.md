@@ -102,16 +102,7 @@ kubectl get hpa -n blockchain
 
 ## Documentation
 
-All comprehensive documentation is organized in the [`book-draft/ci/kubernetes/`](../../book-draft/ci/kubernetes/) directory.
-
-**Quick Links:**
-- **[Complete Guide](../../book-draft/ci/kubernetes/README.md)** - ⭐ **Comprehensive guide with introduction, architecture, migration, and operations**
-- **[Architecture & Core Concepts](../../book-draft/ci/kubernetes/02-Architecture.md)** - System architecture and design
-- **[Migration Guide](../../book-draft/ci/kubernetes/03-Migration.md)** - Migrating from Docker Compose to Kubernetes
-- **[Kubernetes Manifests](../../book-draft/ci/kubernetes/04-Manifests.md)** - Detailed manifest documentation
-- **[Deployment & Operations](../../book-draft/ci/kubernetes/05-Deployment.md)** - Deployment procedures and operations
-- **[Autoscaling](../../book-draft/ci/kubernetes/06-Autoscaling.md)** - Autoscaling implementation guide
-- **[Production & Advanced Topics](../../book-draft/ci/kubernetes/07-Production.md)** - Production best practices
+For a comprehensive walkthrough — covering architecture and core concepts, migration from Docker Compose, manifest details, deployment and operations, autoscaling, and production best practices — see the Kubernetes Deployment chapter in the published book *Building a Blockchain in Rust*.
 
 ## Key Features
 
@@ -175,9 +166,6 @@ kubectl port-forward -n blockchain svc/webserver-service 8080:8080
 
 ## Next Steps
 
-1. Read the [Complete Guide](../../book-draft/ci/kubernetes/README.md) for comprehensive documentation
-2. Review [Kubernetes Manifests](../../book-draft/ci/kubernetes/04-Manifests.md) for detailed manifest documentation
-3. See [Migration Guide](../../book-draft/ci/kubernetes/03-Migration.md) for migrating from Docker Compose
-4. Check [Production Guide](../../book-draft/ci/kubernetes/07-Production.md) for production best practices
-5. Configure monitoring and alerting for production
+1. Read the Kubernetes Deployment chapter in *Building a Blockchain in Rust* for the comprehensive guide, including architecture, migration from Docker Compose, manifest details, and production best practices.
+2. Configure monitoring and alerting for production
 
