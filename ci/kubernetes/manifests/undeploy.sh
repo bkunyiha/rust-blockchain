@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Undeployment script for Kubernetes blockchain network
 # Usage: ./undeploy.sh
 

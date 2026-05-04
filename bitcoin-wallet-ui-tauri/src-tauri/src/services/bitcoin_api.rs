@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use bitcoin_api::{
     ApiConfig, ApiResponse, CreateWalletRequest, CreateWalletResponse,
     SendTransactionRequest, SendTransactionResponse, WalletClient,

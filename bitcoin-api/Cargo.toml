@@ -2,7 +2,7 @@
 name = "bitcoin-api"
 version = "0.1.0"
 edition = "2024"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 
 [features]
 # Feature flags control which client surfaces are compiled.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import React, { useState, useEffect } from "react";
 import { Loader, AlertCircle, Check } from "lucide-react";
 import { useSettings, useSaveSettings, commands } from "../../hooks/useCommands";

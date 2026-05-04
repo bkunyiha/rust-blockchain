@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 export function LoadingSpinner() {
   return (
     <div className="flex items-center justify-center p-8">

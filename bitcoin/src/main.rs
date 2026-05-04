@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use blockchain::node::NodeContext;
 use blockchain::web::server::create_web_server;
 use blockchain::{

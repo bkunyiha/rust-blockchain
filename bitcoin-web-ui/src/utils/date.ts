@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /**
  * Safely format a date string or Date object to a localized string
  * @param date - Date string (ISO 8601) or Date object

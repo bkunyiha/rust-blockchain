@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Wait for a node to be ready before starting this node
 # Usage: wait-for-node.sh <wait_service_name> <instance_number> <port> [is_webserver]
 

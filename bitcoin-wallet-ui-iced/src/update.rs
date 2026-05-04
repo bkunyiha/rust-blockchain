@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::api;
 use crate::app::WalletApp;
 use crate::runtime::spawn_on_tokio;

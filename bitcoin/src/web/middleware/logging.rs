@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use tower_http::trace::TraceLayer;
 
 /// Create logging middleware for the web server

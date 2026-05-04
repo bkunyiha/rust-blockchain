@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! # Hash Functions Module
 //!
 //! This module provides cryptographic hash functions for the blockchain.

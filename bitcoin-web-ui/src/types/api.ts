@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // API Types matching Rust API responses
 
 export interface ApiResponse<T> {

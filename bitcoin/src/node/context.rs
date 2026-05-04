@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Node Context - Central Coordination Point for Node Operations
 //!
 //! This module provides the `NodeContext` struct, which serves as the primary

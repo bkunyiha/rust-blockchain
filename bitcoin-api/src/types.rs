@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use serde::{Deserialize, Serialize};
 
 // Basic shared DTOs matching server responses/requests (subset to start)

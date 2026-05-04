@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::error::{BtcError, Result};
 use crate::primitives::block::{Block, GENESIS_BLOCK_PRE_BLOCK_HASH};
 use crate::primitives::blockchain::Blockchain;

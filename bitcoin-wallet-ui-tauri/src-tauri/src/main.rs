@@ -1,4 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+// SPDX-License-Identifier: MIT OR Apache-2.0
 
 mod commands;
 mod config;

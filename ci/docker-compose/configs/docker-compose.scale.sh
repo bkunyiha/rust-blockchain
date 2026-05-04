@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Helper script to scale miners and webservers
 # Works with running containers - existing containers are kept running
 # Automatically generates port mappings so ALL instances have ports accessible externally

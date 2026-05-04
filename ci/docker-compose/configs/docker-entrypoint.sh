@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 set -e
 
 # Debug logging control (set DEBUG=1 to enable verbose logging)

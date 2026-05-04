@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { Link, useLocation } from 'react-router-dom';
 import { Transition } from '@headlessui/react';
 import { Fragment, useState, useEffect } from 'react';

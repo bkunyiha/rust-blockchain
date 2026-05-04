@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import React from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {

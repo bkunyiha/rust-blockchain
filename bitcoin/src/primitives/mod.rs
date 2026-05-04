@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Primitives module (Bitcoin Core alignment)
 //!
 //! This module contains ONLY pure data structures, following Bitcoin Core's pattern.

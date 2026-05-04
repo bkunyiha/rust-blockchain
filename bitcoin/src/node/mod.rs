@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Node orchestration module (Bitcoin Core style)
 //!
 //! This module provides a clean interface for the web/RPC layer to interact

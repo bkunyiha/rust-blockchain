@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 export interface ApiConfig {
   base_url: string;
   api_key: string;

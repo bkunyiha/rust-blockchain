@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Web-specific data models for requests and responses
 pub mod errors;
 pub mod requests;

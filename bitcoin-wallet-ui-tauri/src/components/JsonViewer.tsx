@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import React, { useState } from "react";
 import { Copy, Check, ChevronDown, ChevronRight } from "lucide-react";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Network P2P operations (Bitcoin Core: net_processing)
 //!
 //! This module handles peer-to-peer communication operations,

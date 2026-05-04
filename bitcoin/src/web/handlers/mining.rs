@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Mining API Handlers
 //!
 //! This module provides REST API endpoints for mining operations, designed to mirror

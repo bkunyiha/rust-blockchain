@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::chain::chainstate::BlockchainService;
 use crate::error::{BtcError, Result};
 use crate::primitives::block::Block;

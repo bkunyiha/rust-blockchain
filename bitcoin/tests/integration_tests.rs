@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use blockchain::{
     BlockchainService, ConnectNode, GLOBAL_CONFIG, Transaction, UTXOSet, WalletService,
 };

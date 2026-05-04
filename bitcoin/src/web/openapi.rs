@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 

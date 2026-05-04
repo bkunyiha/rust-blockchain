@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Declare and defines a module for the util layer
 pub mod functional_operations;
 pub mod utils;

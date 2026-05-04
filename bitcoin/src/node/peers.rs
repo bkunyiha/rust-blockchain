@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::error::{BtcError, Result};
 use std::collections::HashSet;
 use std::net::SocketAddr;

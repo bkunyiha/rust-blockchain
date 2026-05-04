@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { useApiConfig } from '../../contexts/ApiConfigContext';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';

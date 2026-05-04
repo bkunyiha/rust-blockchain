@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Web layer module for HTTP API and web interface
 pub mod handlers;
 pub mod middleware;

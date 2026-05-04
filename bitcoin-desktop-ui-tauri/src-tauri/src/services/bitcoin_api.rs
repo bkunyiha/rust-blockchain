@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::config::ApiConfig;
 use bitcoin_api::client::AdminClient;
 use bitcoin_api::types::{CreateWalletRequest, SendTransactionRequest};

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Mock @tauri-apps/api/core
 const mockResponses: Record<string, any> = {};
 

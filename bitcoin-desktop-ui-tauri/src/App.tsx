@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ShortcutProvider } from './components/ShortcutProvider';
 import { ToastProvider } from './components/Toast';

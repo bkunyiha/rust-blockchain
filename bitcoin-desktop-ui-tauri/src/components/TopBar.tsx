@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { useState } from 'react';
 import { Settings, Sun, Moon } from 'lucide-react';
 import ConnectionBadge from './ConnectionBadge';

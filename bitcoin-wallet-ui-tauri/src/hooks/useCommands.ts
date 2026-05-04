@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { invoke } from "@tauri-apps/api/core";
 import { WalletAddress, Settings, SendTxResult } from "../types";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

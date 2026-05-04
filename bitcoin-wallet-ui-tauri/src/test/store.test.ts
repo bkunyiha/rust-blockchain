@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { describe, it, expect, beforeEach } from "vitest";
 import { useWalletStore } from "../store/walletStore";
 import { useToastStore } from "../store/toastStore";

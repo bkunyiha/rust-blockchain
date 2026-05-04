@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::node::NodeContext;
 use crate::web::middleware::cors;
 use crate::web::middleware::rate_limit::{RateLimitConfig, build_rate_limiter_manager};

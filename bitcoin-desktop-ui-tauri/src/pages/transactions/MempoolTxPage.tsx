@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useInvoke } from '../../hooks/useInvoke';

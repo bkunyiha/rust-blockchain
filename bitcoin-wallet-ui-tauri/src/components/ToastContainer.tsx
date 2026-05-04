@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import React from "react";
 import { X, CheckCircle, AlertCircle, Info } from "lucide-react";
 import { useToastStore, ToastType } from "../store/toastStore";

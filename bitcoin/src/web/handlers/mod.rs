@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // HTTP request handlers for the web API
 pub mod blockchain;
 pub mod health;

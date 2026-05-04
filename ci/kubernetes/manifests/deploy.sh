@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Deployment script for Kubernetes blockchain network
 # Usage: ./deploy.sh [environment]
 # Example: ./deploy.sh production

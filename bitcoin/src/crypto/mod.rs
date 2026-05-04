@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Declare and defines a module for the crypto layer
 pub mod address;
 pub mod hash;

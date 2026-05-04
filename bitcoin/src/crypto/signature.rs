@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! # Signature Functions Module
 //!
 //! This module provides cryptographic signature functions for the blockchain.

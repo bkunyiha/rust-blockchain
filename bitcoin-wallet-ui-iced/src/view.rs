@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::app::WalletApp;
 use crate::types::{Menu, Message};
 use iced::Element;

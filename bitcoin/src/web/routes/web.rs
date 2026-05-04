@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::node::NodeContext;
 use crate::web::openapi::create_swagger_ui;
 use axum::{Router, response::Html, routing::get};

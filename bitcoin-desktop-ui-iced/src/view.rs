@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::app::AdminApp;
 use crate::types::{
     BlockchainSection, HealthSection, Menu, Message, MiningSection, TransactionSection,

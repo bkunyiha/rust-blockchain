@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Incremental scaling script - removes one instance at a time
 # Automatically updates port mappings so remaining instances have ports accessible externally
 # Usage: ./scale-down.sh [service] [current_count]

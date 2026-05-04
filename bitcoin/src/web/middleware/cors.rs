@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use tower_http::cors::{Any, CorsLayer};
 
 /// Create CORS middleware for the web server

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Web middleware for request processing
 pub mod auth;
 pub mod cors;

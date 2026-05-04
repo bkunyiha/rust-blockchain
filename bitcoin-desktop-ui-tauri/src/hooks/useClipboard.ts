@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { useState, useCallback } from 'react';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
 import { useToast } from '../components/Toast';

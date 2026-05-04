@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Memory pool management (Bitcoin Core: txmempool.cpp)
 //!
 //! This module handles the transaction memory pool data structure,

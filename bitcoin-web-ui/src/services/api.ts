@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import axios, { AxiosInstance } from 'axios';
 import type {
   ApiResponse,

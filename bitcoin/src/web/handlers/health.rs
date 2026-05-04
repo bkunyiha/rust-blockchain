@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use axum::{extract::State, http::StatusCode, response::Json};
 use std::sync::Arc;
 use std::time::Instant;

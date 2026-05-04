@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { useAppStore } from '../store/useAppStore';
 import { formatDate } from '../lib/utils';
 

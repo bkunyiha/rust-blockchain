@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! # Keypair Generation Module
 //!
 //! This module provides cryptographic key pair generation for the blockchain, supporting both

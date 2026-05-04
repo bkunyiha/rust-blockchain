@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import { useState, useMemo } from 'react';
 import { ChevronRight, ChevronDown, Copy, Search } from 'lucide-react';
 import { useClipboard } from '../hooks/useClipboard';

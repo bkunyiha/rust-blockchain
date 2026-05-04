@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Generate docker-compose.override.yml with port mappings for multiple instances
 # Usage: ./generate-compose-ports.sh [num_miners] [num_webservers]
 

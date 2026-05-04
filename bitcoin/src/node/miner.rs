@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 //! Mining operations (Bitcoin Core: miner.cpp)
 //!
 //! This module handles block creation and mining operations, similar to

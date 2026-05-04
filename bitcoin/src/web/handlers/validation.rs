@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Validation service for web layer
 use crate::web::models::requests::*;
 use validator::Validate;

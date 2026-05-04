@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use super::block::Block;
 use data_encoding::HEXLOWER;
 use num_bigint::{BigInt, Sign};

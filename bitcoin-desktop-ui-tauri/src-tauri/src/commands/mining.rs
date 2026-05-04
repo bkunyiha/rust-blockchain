@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 use crate::config::ApiConfig;
 use crate::services::BitcoinApiService;
 use serde_json::Value;

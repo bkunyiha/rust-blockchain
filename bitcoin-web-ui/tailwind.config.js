@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
